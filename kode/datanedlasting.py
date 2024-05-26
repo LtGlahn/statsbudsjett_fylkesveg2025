@@ -5,6 +5,7 @@ Analysen blir mer etterprøvbar når vi har stålkontroll på datagrunnlaget. NV
 database med daglige endringer. Det kan dermed være krevende å ettergå analyser når NVDB vegnett og
 datagrunnlag kan ha endret seg.
 """
+from datetime import datetime
 import pandas as pd
 import geopandas as gpd
 from shapely import wkt 
@@ -32,6 +33,7 @@ def lagreData( sokeobjekt, gdbfil, layer, excelfil=None ):
         None 
     """
     
+    tnull = datetime.now()
     mydf = pd.DataFrame( sokeobjekt.to_records() )
     myGdf = gpd.GeoDataFrame( mydf, geometry=mydf['geometri'].apply( wkt.loads ), crs=5973 )
     myGdf.to_file( datafil, layer=layer, driver='OpenFileGDB' )
@@ -43,9 +45,12 @@ def lagreData( sokeobjekt, gdbfil, layer, excelfil=None ):
     testGdf = gpd.read_file( gdbfil, layer=layer )
     if len( testGdf ) != len( mydf ): 
         raise( ValueError( "Avvik antall lagret på disk - arbeidsminne!"))
+    
+    print( f"Tid for datanenedlasting {len(mydf)} rader til lag {layer}: {datetime.now()-tnull}")
 
 if __name__ == '__main__': 
 
+    t0 = datetime.now()
     # mappe og filer der vi lagrer grunnlagsdata
     datadir = '../grunnlagsdata/'
     datafil =  datadir + 'grunnlagsdata.gdb'
@@ -79,3 +84,5 @@ if __name__ == '__main__':
     # Trafikkmengde
     lagreData( nvdbapiv3.nvdbFagdata(540, filter=mittfilter ), datafil, 'trafikkmengde', datadir+'grunnlagsdata_trafikkmengde.xlsx' )
 
+
+    print( f"Tid for datanedlasting totalt: {datetime.now()-t0}")
