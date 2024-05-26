@@ -583,7 +583,7 @@ def skrivexcel( filnavn, dataFrameListe, sheet_nameListe=[], indexListe=[], slet
         mydf = endf.copy()
 
         if slettgeometri: 
-            sletteliste = ['geometri', 'geometry']
+            sletteliste = ['geometri', 'geometry', 'href']
             for slettkol in sletteliste: 
                 if slettkol in mydf: 
                     mydf.drop( columns=slettkol, inplace=True )
