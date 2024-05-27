@@ -46,6 +46,11 @@ def lagreData( sokeobjekt, gdbfil, layer, excelfil=None ):
     if len( testGdf ) != len( mydf ): 
         raise( ValueError( "Avvik antall lagret på disk - arbeidsminne!"))
     
+    if excelfil: 
+        testExcel = pd.read_excel( excelfil )
+        if len( testExcel ) != len( mydf ): 
+            raise( ValueError( "Avvik antall lagret på disk som EXCEL og data i arbeidsminne!"))
+
     print( f"Tid for datanenedlasting {len(mydf)} rader til lag {layer}: {datetime.now()-tnull}")
 
 if __name__ == '__main__': 
@@ -83,6 +88,5 @@ if __name__ == '__main__':
 
     # Trafikkmengde
     lagreData( nvdbapiv3.nvdbFagdata(540, filter=mittfilter ), datafil, 'trafikkmengde', datadir+'grunnlagsdata_trafikkmengde.xlsx' )
-
 
     print( f"Tid for datanedlasting totalt: {datetime.now()-t0}")
