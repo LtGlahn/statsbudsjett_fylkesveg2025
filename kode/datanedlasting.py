@@ -9,6 +9,7 @@ from datetime import datetime
 import pandas as pd
 import geopandas as gpd
 from shapely import wkt 
+from copy import deepcopy
 
 
 import STARTHER
@@ -36,7 +37,7 @@ def lagreData( sokeobjekt, gdbfil, layer, excelfil=None ):
     tnull = datetime.now()
     mydf = pd.DataFrame( sokeobjekt.to_records() )
     myGdf = gpd.GeoDataFrame( mydf, geometry=mydf['geometri'].apply( wkt.loads ), crs=5973 )
-    myGdf.to_file( datafil, layer=layer, driver='OpenFileGDB' )
+    myGdf.to_file( gdbfil, layer=layer, driver='OpenFileGDB' )
     if excelfil: 
         nvdbgeotricks.skrivexcel( excelfil, mydf )
 
@@ -77,7 +78,9 @@ if __name__ == '__main__':
 
     # Lagrer bruobjekter (som også omfatter ferjekaier og VELDIG mye mer)
     # Uavklart: Er det NVDB eller Brutus (foretrukket) som skal væe fasiten på antall ferjekaier og bruer til stadsbudsett? 
-    lagreData( nvdbapiv3.nvdbFagdata(60, filter=mittfilter ), datafil, 'bru', datadir+'grunnlagsdata_bru.xlsx' )
+    brufilter = deepcopy( mittfilter)
+    brufilter['segmentering'] = False 
+    lagreData( nvdbapiv3.nvdbFagdata(60, filter=brufilter ), datafil, 'bru', datadir+'grunnlagsdata_bru.xlsx' )
     
     # Lagre fartsgrenser. Tar alt, enklere å filtrere etterpå. 
     lagreData( nvdbapiv3.nvdbFagdata(105, filter=mittfilter ), datafil, 'fartsgrense', datadir+'grunnlagsdata_fartsgrense.xlsx' )
