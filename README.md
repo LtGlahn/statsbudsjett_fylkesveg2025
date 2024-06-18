@@ -4,11 +4,15 @@ Vi viser til regjeringsdokumentet
 [Forslag til ny modell for beregning av kriteriet for fylkesveg i inntektssystemet for fylkeskommunene](https://www.regjeringen.no/no/dokumenter/forslag-til-ny-modell-for-beregning-av-kriteriet-for-fylkesveg-i-inntektssystemet-for-fylkeskommunene/id2864850/), som igjen viser til [denne rapporten](https://www.regjeringen.no/contentassets/e8645ebe0e02470da89253caef0addba/rapport-forenklet-modell-til-kriteriet-for-utgiftsbehov-ti1405835.pdf). Denne rapporten, skrevet av konsulentselskapet Vianova, har detaljerte instruksjoner for hvilke data som inngår i inntektsmodellen, samt detaljerte instruksjoner for nedlasting og databearbeiding. Disse instruksjonene er her omsatt til python-kode for automatisert, repeterbar og etterprøvbar fremstiling. Rapporten er også 
 [lagret lokalt](./pics/rapport-forenklet-modell-til-kriteriet-for-utgiftsbehov-ti1405835.pdf)
 
-### Revisjon 2024 
+### Revisjon for budsjettåret 2025
 
 Etter dialog med samferdselsdepartementet våren 2024 fikk Statens vegvesen tildelingsbrev med beskjed om et par justering av metodikk for datauttak: 
   * Feltlengde skal ikke lengre tas ut for bilferje, kun for kjørbar bilveg
   * Lengde _Gang- og sykkelveg_ suppleres med data for veglenketypene _gangveg_ og _sykkelveg_.
+
+# Datagrunnlag for budsjettåret 2025 
+
+Alt av datagrunnlag, resultater og kode ligger på serveren https://langbein.npra.io/nvdbdata/statsbudsjett_fylkesveg2025/ . Datagrunnlaget for beregningen er tatt ut 14. juni 2024, og ligger i undermappen [/grunnlagsdata](https://langbein.npra.io/nvdbdata/statsbudsjett_fylkesveg2025/grunnlagsdata/) på formatet Esri fil-geodatabase. [Lenke for nedlasting av fil-geodatabase](https://langbein.npra.io/nvdbdata/statsbudsjett_fylkesveg2025/grunnlagsdata/grunnlagsdata_FGDB_20240614.zip). I undermappen [/grunnlagsdata](https://langbein.npra.io/nvdbdata/statsbudsjett_fylkesveg2025/grunnlagsdata/) ligger det også excel regneark med grunnlagsdata for NVDB objekttypene belysningspunkt, bru, fartsgrense, rekkverk, tunnel og vegnett. 
 
 ### Feltlengde
 
@@ -80,9 +84,7 @@ Dette er summen av egenskapen _Lengde_ for objekttype bru på kjørbar fylkesveg
 
 ### Ferjekaibru og tillegskai
 
-Disse dataene ajourholdes i Brutus, som også fortløpende oppdaterer objekttypen "60 Bru" i NVDB. Her følger vi den såkalte  [Vianova-oppskriften fra 2021](https://www.regjeringen.no/contentassets/e8645ebe0e02470da89253caef0addba/rapport-forenklet-modell-til-kriteriet-for-utgiftsbehov-ti1405835.pdf)
-
-som beskriver filtre for datauttak av NVDB-objekt av typen 60 bru på fylkesveg:
+Disse dataene ajourholdes i Brutus, som også fortløpende oppdaterer objekttypen "60 Bru" i NVDB. Her følger vi den såkalte  [Vianova-oppskriften fra 2021](https://www.regjeringen.no/contentassets/e8645ebe0e02470da89253caef0addba/rapport-forenklet-modell-til-kriteriet-for-utgiftsbehov-ti1405835.pdf) som beskriver filtre for datauttak av NVDB-objekt av typen 60 bru på fylkesveg:
   * vegsystemreferanse = Fv
   * trafikantgruppe = 'K'
 
@@ -120,4 +122,4 @@ Tallene for foregående års inntekstgrunnlag er derfor ikke direkte sammenlignb
 
 ### Veg med fartsgrense 50 km/t eller lavere
 
-Her følger vi KOSTRA-metodikk for å telle veg: _Vi teller alle kryssdeler, men ikke sideanlegg, konnekteringslenker eller adskilte løp=MOT. Og vi teller kun veglenketypene kanalisertVeg, enkelBilveg, rampe, rundkjøring og gatetun_. 
+Her følger vi KOSTRA-metodikk når vi summerer lengden av de fartsgrensene som er 50 km/t eller lavere: _Vi teller alle kryssdeler, men ikke sideanlegg, konnekteringslenker eller adskilte løp=MOT. Og vi teller kun veglenketypene kanalisertVeg, enkelBilveg, rampe, rundkjøring og gatetun_. 
